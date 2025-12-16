@@ -13,12 +13,17 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
+    implementation("io.quarkus:quarkus-hibernate-validator")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-rest")
+    implementation("io.quarkus:quarkus-rest-jackson")
     implementation("io.quarkus:quarkus-hibernate-orm")
+
+    implementation("org.mindrot:jbcrypt:0.4")
+
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
@@ -38,4 +43,18 @@ tasks.withType<Test> {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
+}
+
+tasks.compileJava {
+    options.encoding = "UTF-8"
+    options.compilerArgs.add("-parameters")
+}
+
+tasks.test {
+    systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
+}
+
+tasks.quarkusDev {
+    jvmArgs = listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }

@@ -6,6 +6,6 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - './data/postgres:/var/lib/postgresql'
+      - '/home/astro/.local/share/data/postgres:/var/lib/postgresql'
     env_file: .env
 
