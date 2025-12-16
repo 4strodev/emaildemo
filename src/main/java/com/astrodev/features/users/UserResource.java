@@ -18,5 +18,12 @@ public class UserResource {
     @Operation(summary = "Creates a new user in the platform")
     public void saveUser(@PathParam("id") UUID id, CreateUserDTO createUserDTO) {
         this.userService.create(id, createUserDTO);
+        this.userService.sendEmail(createUserDTO.email(), "User created successfully");
+    }
+
+    @Path("email")
+    @POST
+    public void sendEmail(SendEmailDTO sendEmailDTO) {
+        this.userService.sendEmail(sendEmailDTO.to(), sendEmailDTO.message());
     }
 }

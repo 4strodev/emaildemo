@@ -13,6 +13,7 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
+    implementation("io.quarkus:quarkus-mailer")
     implementation("io.quarkus:quarkus-hibernate-validator")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-jdbc-postgresql")
@@ -45,16 +46,6 @@ tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters")
 }
 
-tasks.compileJava {
-    options.encoding = "UTF-8"
-    options.compilerArgs.add("-parameters")
-}
-
 tasks.test {
-    systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
-}
-
-tasks.quarkusDev {
-    jvmArgs = listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED")
+    enabled = false
 }
