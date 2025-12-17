@@ -7,6 +7,7 @@ import com.astrodev.shared.http.HttpErrorDetails;
 import com.astrodev.shared.http.HttpResponse;
 import com.astrodev.shared.monads.Err;
 import com.astrodev.shared.monads.Ok;
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -36,6 +37,7 @@ public class UserResource {
 
     @Path("/ping")
     @GET
+    @Authenticated
     public HttpResponse ping() {
         return HttpResponse.success("pong");
     }
