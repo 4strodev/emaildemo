@@ -24,7 +24,7 @@ public class UserResource {
     @Operation(summary = "Creates a new user in the platform")
     @PermitAll
     public HttpResponse saveUser(@PathParam("id") UUID id, HTTPCreateUserDTO body) {
-        this.userService.create(new CreateUserDTO(id, body.name(), body.email(), body.password()));
+        this.userService.save(new CreateUserDTO(id, body.name(), body.email(), body.password()));
         return HttpResponse.success(null);
     }
 

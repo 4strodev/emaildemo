@@ -15,12 +15,12 @@ public class UserService {
     EntityManager entityManager;
 
     @Transactional
-    public void create(CreateUserDTO createUserDTO) {
+    public void save(CreateUserDTO createUserDTO) {
         LOG.info("Creating user");
-        var userEntity = new User();
-        userEntity.id = createUserDTO.id();
-        userEntity.email = createUserDTO.email();
-        userEntity.password = BCrypt.hashpw(createUserDTO.password(), BCrypt.gensalt(12));
-        entityManager.persist(userEntity);
+        var user = new User();
+        user.id = createUserDTO.id();
+        user.email = createUserDTO.email();
+        user.password = BCrypt.hashpw(createUserDTO.password(), BCrypt.gensalt(12));
+        entityManager.merge(user);
     }
 }
