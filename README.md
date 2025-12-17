@@ -22,6 +22,17 @@ installed
 quarkus.mailer.mock=true
 ```
 
+### Generate RSA keys
+
+Run the following commands and move `privateKey.pem` and `publicKey.pem` to
+`src/main/resources`.
+
+```shell
+openssl genrsa -out rsaPrivateKey.pem 2048
+openssl rsa -pubout -in rsaPrivateKey.pem -out publicKey.pem
+openssl pkcs8 -topk8 -nocrypt -inform pem -in rsaPrivateKey.pem -outform pem -out privateKey.pem
+```
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
