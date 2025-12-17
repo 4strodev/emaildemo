@@ -1,5 +1,6 @@
 package com.astrodev.shared.http;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public sealed interface HttpResponse {
@@ -14,7 +15,7 @@ public sealed interface HttpResponse {
     @JsonProperty
     boolean ok();
 
-    record HttpSuccessResponse<T>(T data) implements HttpResponse {
+    record HttpSuccessResponse<T>(@JsonInclude(JsonInclude.Include.NON_NULL) T data) implements HttpResponse {
         @Override
         public boolean ok() {
             return true;
