@@ -12,10 +12,11 @@ public sealed interface HttpResponse {
         return new HttpErrorResponse(error);
     }
 
-    @JsonProperty
+
     boolean ok();
 
     record HttpSuccessResponse<T>(@JsonInclude(JsonInclude.Include.NON_NULL) T data) implements HttpResponse {
+        @JsonProperty
         @Override
         public boolean ok() {
             return true;
@@ -24,6 +25,7 @@ public sealed interface HttpResponse {
 
     record HttpErrorResponse(HttpErrorDetails error) implements HttpResponse {
         @Override
+        @JsonProperty
         public boolean ok() {
             return false;
         }

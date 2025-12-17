@@ -24,7 +24,7 @@ public class AuthResource {
     public HttpResponse createSession(CreateSessionDTO createSessionDTO) {
         final var result = this.authService.createSession(createSessionDTO);
         return switch (result) {
-            case Err(var error) -> HttpResponse.error(new HttpErrorDetails(error.getMessage()));
+            case Err(var error) -> HttpResponse.error(HttpErrorDetails.fromThrowable(error));
             case Ok(var tokens) -> HttpResponse.success(new SessionCreateResDTO(
                     tokens.refreshToken(),
                     tokens.accessToken()

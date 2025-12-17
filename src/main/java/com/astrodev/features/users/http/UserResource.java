@@ -3,7 +3,10 @@ package com.astrodev.features.users.http;
 import com.astrodev.features.users.application.CreateUserDTO;
 import com.astrodev.features.users.application.UserService;
 import com.astrodev.features.users.http.dtos.HTTPCreateUserDTO;
+import com.astrodev.shared.http.HttpErrorDetails;
 import com.astrodev.shared.http.HttpResponse;
+import com.astrodev.shared.monads.Err;
+import com.astrodev.shared.monads.Ok;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -24,8 +27,11 @@ public class UserResource {
     @Operation(summary = "Creates a new user in the platform")
     @PermitAll
     public HttpResponse saveUser(@PathParam("id") UUID id, HTTPCreateUserDTO body) {
-        this.userService.save(new CreateUserDTO(id, body.name(), body.email(), body.password()));
-        return HttpResponse.success(null);
+        var result = this.userService.save(new CreateUserDTO(id, body.name(), body.email(), body.password()));
+        return switch (result) {
+            case Ok(var nullValue) -> HttpResponse.success(nullValue);
+            case Err(var error) -> HttpResponse.error(HttpErrorDetails.fromThrowable(error));
+        };
     }
 
     @Path("/ping")
