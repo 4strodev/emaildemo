@@ -23,7 +23,7 @@ public class UserService {
             user.id = createUserDTO.id();
             user.email = createUserDTO.email();
             user.password = BCrypt.hashpw(createUserDTO.password(), BCrypt.gensalt(12));
-            entityManager.persist(user);
+            entityManager.merge(user);
             entityManager.flush();
             return Result.ok(null);
         } catch (Throwable e) {
