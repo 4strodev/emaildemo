@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.UUID;
+
 @ApplicationScoped
 public class UserService {
     private static final Logger LOG = Logger.getLogger(UserService.class);
@@ -22,12 +24,22 @@ public class UserService {
             var user = new User();
             user.id = createUserDTO.id();
             user.email = createUserDTO.email();
+            user.username = createUserDTO.username();
             user.password = BCrypt.hashpw(createUserDTO.password(), BCrypt.gensalt(12));
             entityManager.merge(user);
             entityManager.flush();
             return Result.ok(null);
         } catch (Throwable e) {
             return Result.err(e);
+        }
+    }
+
+    public Result<User, Throwable> find(UUID id) {
+        try {
+            var user = entityManager.find(User.class, id);
+            return Result.ok(user);
+        } catch (Exception err) {
+            return Result.err(err);
         }
     }
 }

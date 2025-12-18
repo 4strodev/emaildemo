@@ -8,8 +8,8 @@ public sealed interface HttpResponse {
         return new HttpSuccessResponse<>(data);
     }
 
-    static HttpErrorResponse error(HttpErrorDetails error) {
-        return new HttpErrorResponse(error);
+    static HttpErrorResponse error(HttpErrorResponseData responseData) {
+        return new HttpErrorResponse(responseData);
     }
 
 
@@ -23,7 +23,7 @@ public sealed interface HttpResponse {
         }
     }
 
-    record HttpErrorResponse(HttpErrorDetails error) implements HttpResponse {
+    record HttpErrorResponse(HttpErrorResponseData error) implements HttpResponse {
         @Override
         @JsonProperty
         public boolean ok() {
