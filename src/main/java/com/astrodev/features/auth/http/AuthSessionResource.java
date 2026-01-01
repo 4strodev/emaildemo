@@ -3,18 +3,23 @@ package com.astrodev.features.auth.http;
 import com.astrodev.features.auth.application.AuthService;
 import com.astrodev.features.auth.application.AuthSessionTokenStore;
 import com.astrodev.features.auth.application.CreateSessionDTO;
+import com.astrodev.features.auth.application.RefreshSessionDTO;
 import com.astrodev.features.auth.http.dtos.SessionCreateResDTO;
+import com.astrodev.features.auth.http.dtos.SessionRefreshReqDTO;
+import com.astrodev.features.auth.http.dtos.SessionRefreshResDTO;
 import com.astrodev.shared.http.HttpErrorDetails;
 import com.astrodev.shared.http.HttpErrorResponseData;
 import com.astrodev.shared.http.HttpResponse;
 import com.astrodev.shared.monads.Err;
 import com.astrodev.shared.monads.Ok;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 
-@Path("/auth")
-public class AuthResource {
+@Path("/auth/session")
+public class AuthSessionResource {
     @Inject
     AuthService authService;
 
@@ -33,6 +38,19 @@ public class AuthResource {
                     tokens.refreshToken(),
                     tokens.accessToken()
             ));
+        };
+    }
+
+    @PATCH
+    @PermitAll
+    public HttpResponse refreshSession(SessionRefreshReqDTO sessionRefreshReqDTO) {
+        var result = this.authService.refreshSession(new RefreshSessionDTO(sessionRefreshReqDTO.refreshToken()));
+        return switch (result) {
+            case Err(var error) -> HttpResponse.error(new HttpErrorResponseData(
+                    null,
+                    HttpErrorDetails.fromThrowable(error)
+            ));
+            case Ok(var tokens) -> HttpResponse.success(new SessionRefreshResDTO(tokens.accessToken()));
         };
     }
 }
