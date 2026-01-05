@@ -1,12 +1,12 @@
-package com.astrodev.features.auth.http;
+package com.astrodev.features.auth.infrastructure.http;
 
 import com.astrodev.features.auth.application.AuthService;
 import com.astrodev.features.auth.application.AuthSessionTokenStore;
 import com.astrodev.features.auth.application.CreateSessionDTO;
 import com.astrodev.features.auth.application.RefreshSessionDTO;
-import com.astrodev.features.auth.http.dtos.SessionCreateResDTO;
-import com.astrodev.features.auth.http.dtos.SessionRefreshReqDTO;
-import com.astrodev.features.auth.http.dtos.SessionRefreshResDTO;
+import com.astrodev.features.auth.infrastructure.http.dtos.SessionCreateResDTO;
+import com.astrodev.features.auth.infrastructure.http.dtos.SessionRefreshReqDTO;
+import com.astrodev.features.auth.infrastructure.http.dtos.SessionRefreshResDTO;
 import com.astrodev.shared.http.HttpErrorDetails;
 import com.astrodev.shared.http.HttpErrorResponseData;
 import com.astrodev.shared.http.HttpResponse;

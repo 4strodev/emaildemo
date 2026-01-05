@@ -1,4 +1,4 @@
-package com.astrodev.features.auth.http.dtos;
+package com.astrodev.features.auth.infrastructure.http.dtos;
 
 public record SessionRefreshReqDTO(String refreshToken) {
 }

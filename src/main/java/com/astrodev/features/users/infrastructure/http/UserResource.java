@@ -1,8 +1,8 @@
-package com.astrodev.features.users.http;
+package com.astrodev.features.users.infrastructure.http;
 
 import com.astrodev.features.users.application.CreateUserDTO;
 import com.astrodev.features.users.application.UserService;
-import com.astrodev.features.users.http.dtos.HTTPCreateUserDTO;
+import com.astrodev.features.users.infrastructure.http.dtos.HTTPCreateUserDTO;
 import com.astrodev.shared.http.HttpResponse;
 import com.astrodev.shared.monads.Err;
 import com.astrodev.shared.monads.Ok;

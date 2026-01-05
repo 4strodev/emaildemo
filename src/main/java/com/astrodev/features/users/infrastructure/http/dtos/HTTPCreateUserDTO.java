@@ -1,4 +1,4 @@
-package com.astrodev.features.users.http.dtos;
+package com.astrodev.features.users.infrastructure.http.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
