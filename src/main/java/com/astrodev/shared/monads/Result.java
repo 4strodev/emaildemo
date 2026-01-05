@@ -1,5 +1,7 @@
 package com.astrodev.shared.monads;
 
+import com.astrodev.shared.functionalinterfaces.ThrowableSupplier;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -10,6 +12,17 @@ public sealed interface Result<R, E extends Throwable> permits Ok, Err {
 
     static <R, E extends Throwable> Result<R, E> err(E error) {
         return new Err<>(error);
+    }
+
+    static <R, E extends Throwable> Result<R, E> fromSupplier(ThrowableSupplier<R, E> supplier) {
+        try {
+            var resultValue = supplier.get();
+            return Result.ok(resultValue);
+        } catch (Throwable t) {
+            @SuppressWarnings("unchecked")
+            E e = (E) t;
+            return Result.err(e);
+        }
     }
 
     boolean isOk();
@@ -29,7 +42,5 @@ public sealed interface Result<R, E extends Throwable> permits Ok, Err {
     <F extends Throwable> Result<R, F> mapErr(Function<E, F> mapper);
 
     <U> Result<U, E> flatMap(Function<R, Result<U, E>> mapper);
-
-
 }
 
