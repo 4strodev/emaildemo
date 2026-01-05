@@ -48,27 +48,34 @@ public class AuthService {
     }
 
     public Result<SessionTokens, Exception> refreshSession(RefreshSessionDTO refreshSessionDTO) {
-        JsonWebToken jwt;
-        try {
-            jwt = jwtParser.parse(refreshSessionDTO.refreshToken());
-        } catch (ParseException exception) {
-            return Result.err(exception);
-        }
+        return this.parseToken(refreshSessionDTO.refreshToken())
+                .mapErr(exception -> (Exception) exception)
+                .flatMap(jwt -> {
+                    UUID sessionId = UUID.fromString(jwt.getClaim("sid"));
+                    if (!this.authSessionTokenStore.exists(sessionId)) {
+                        return Result.err(new Exception("Refresh token revoked"));
+                    }
 
-        UUID sessionId = UUID.fromString(jwt.getClaim("sid"));
-        if (!this.authSessionTokenStore.exists(sessionId)) {
-            return Result.err(new Exception("Refresh token revoked"));
+                    AuthSession sessionFound = this.authSessionRepository.find("id", sessionId).firstResult();
+                    if (sessionFound == null) {
+                        return Result.err(new Exception("Session not found"));
+                    }
 
-        }
+                    var accessToken = this.createAccessToken(sessionFound);
 
-        AuthSession sessionFound = this.authSessionRepository.find("id", sessionId).firstResult();
-        if (sessionFound == null) {
-            return Result.err(new Exception("Session not found"));
-        }
+                    return Result.ok(new SessionTokens(
+                            refreshSessionDTO.refreshToken(),
+                            accessToken
+                    ));
+                });
+    }
 
-        var accessToken = this.createAccessToken(sessionFound);
+    public Result<Void, Exception> deleteSession(DeleteSessionDTO deleteSessionDTO) {
+        return Result.ok(null);
+    }
 
-        return Result.ok(new SessionTokens(refreshSessionDTO.refreshToken(), accessToken));
+    private Result<JsonWebToken, ParseException> parseToken(String refreshToken) {
+        return Result.fromSupplier(() -> jwtParser.parse(refreshToken));
     }
 
     private SessionTokens createTokens(AuthSession authSession) {
