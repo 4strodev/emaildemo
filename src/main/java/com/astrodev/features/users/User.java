@@ -1,5 +1,6 @@
 package com.astrodev.features.users;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -10,7 +11,7 @@ import java.util.UUID;
                 "email"
         }
 ))
-public class User {
+public class User extends PanacheEntityBase {
     @Id
     public UUID id;
     @Column(length = 255)
