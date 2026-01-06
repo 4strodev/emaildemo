@@ -33,14 +33,16 @@ public sealed interface Result<R, E extends Throwable> permits Ok, Err {
 
     R unwrapOr(R defaultValue);
 
-    void ifOk(Consumer<R> consumer);
+    Result<R, E> peekOk(Consumer<R> consumer);
 
-    void ifErr(Consumer<E> consumer);
+    Result<R, E> peekErr(Consumer<E> consumer);
 
     <U> Result<U, E> map(Function<R, U> mapper);
 
     <F extends Throwable> Result<R, F> mapErr(Function<E, F> mapper);
 
     <U> Result<U, E> flatMap(Function<R, Result<U, E>> mapper);
+
+    <F extends Throwable> Result<R, F> flatMapError(Function<E, Result<R, F>> mapper);
 }
 

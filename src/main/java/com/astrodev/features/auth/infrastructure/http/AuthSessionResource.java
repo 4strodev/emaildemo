@@ -26,6 +26,7 @@ public class AuthSessionResource {
     AuthSessionTokenStore tokenStore;
 
     @POST
+    @PermitAll
     public HttpResponse createSession(CreateSessionDTO createSessionDTO) {
         final var result = this.authService.createSession(createSessionDTO);
         return switch (result) {

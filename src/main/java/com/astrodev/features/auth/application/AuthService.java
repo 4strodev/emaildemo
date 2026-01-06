@@ -49,7 +49,7 @@ public class AuthService {
 
     public Result<SessionTokens, Exception> refreshSession(RefreshSessionDTO refreshSessionDTO) {
         return this.parseToken(refreshSessionDTO.refreshToken())
-                .mapErr(exception -> (Exception) exception)
+                .mapErr(e -> (Exception) e)
                 .flatMap(jwt -> {
                     UUID sessionId = UUID.fromString(jwt.getClaim("sid"));
                     if (!this.authSessionTokenStore.exists(sessionId)) {
@@ -70,12 +70,33 @@ public class AuthService {
                 });
     }
 
+    @Transactional
     public Result<Void, Exception> deleteSession(DeleteSessionDTO deleteSessionDTO) {
+        return this.parseToken(deleteSessionDTO.refreshToken())
+                .mapErr(e -> (Exception) e)
+                .flatMap(jwt -> {
+                    UUID sessionId = UUID.fromString(jwt.getClaim("sid"));
+                    this.authSessionRepository.delete("id", sessionId);
+                    this.authSessionTokenStore.remove(sessionId);
+
+                    return Result.ok(null);
+                });
+    }
+
+    public Result<Void, Exception> validateSession(UUID sessionId) {
+        if (!this.authSessionTokenStore.exists(sessionId)) {
+            return Result.err(new Exception("Token revoked"));
+        }
+
         return Result.ok(null);
     }
 
     private Result<JsonWebToken, ParseException> parseToken(String refreshToken) {
-        return Result.fromSupplier(() -> jwtParser.parse(refreshToken));
+        try {
+            return Result.ok(jwtParser.parse(refreshToken));
+        } catch (ParseException parseException) {
+            return Result.err(parseException);
+        }
     }
 
     private SessionTokens createTokens(AuthSession authSession) {

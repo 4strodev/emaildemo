@@ -23,8 +23,9 @@ public record Err<R, E extends Throwable>(E error) implements Result<R, E> {
     }
 
     @Override
-    public void ifErr(Consumer<E> consumer) {
+    public Result<R, E> peekErr(Consumer<E> consumer) {
         consumer.accept(error);
+        return this;
     }
 
     @Override
@@ -43,6 +44,12 @@ public record Err<R, E extends Throwable>(E error) implements Result<R, E> {
     }
 
     @Override
-    public void ifOk(Consumer<R> consumer) {
+    public <F extends Throwable> Result<R, F> flatMapError(Function<E, Result<R, F>> mapper) {
+        return mapper.apply(error);
+    }
+
+    @Override
+    public Result<R, E> peekOk(Consumer<R> consumer) {
+        return this;
     }
 }
