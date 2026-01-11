@@ -1,6 +1,6 @@
 package com.astrodev.features.healthcheck.infrastructure.http;
 
-import com.astrodev.shared.http.HttpResponse;
+import com.astrodev.shared.http.response.HttpResponse;
 import io.quarkus.security.Authenticated;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

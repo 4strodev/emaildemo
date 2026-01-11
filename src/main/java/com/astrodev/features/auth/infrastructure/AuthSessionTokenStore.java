@@ -1,4 +1,4 @@
-package com.astrodev.features.auth.application;
+package com.astrodev.features.auth.infrastructure;
 
 import jakarta.enterprise.context.ApplicationScoped;
 

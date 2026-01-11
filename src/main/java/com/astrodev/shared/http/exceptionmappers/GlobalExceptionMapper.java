@@ -1,9 +1,9 @@
 package com.astrodev.shared.http.exceptionmappers;
 
 
-import com.astrodev.shared.http.HttpErrorDetails;
-import com.astrodev.shared.http.HttpErrorResponseData;
-import com.astrodev.shared.http.HttpResponse;
+import com.astrodev.shared.http.response.HttpErrorDetails;
+import com.astrodev.shared.http.response.HttpErrorResponseData;
+import com.astrodev.shared.http.response.HttpResponse;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.WebApplicationException;

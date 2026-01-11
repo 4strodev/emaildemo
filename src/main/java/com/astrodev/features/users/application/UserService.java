@@ -27,8 +27,7 @@ public class UserService {
             user.email = createUserDTO.email();
             user.username = createUserDTO.username();
             user.password = BCrypt.hashpw(createUserDTO.password(), BCrypt.gensalt(12));
-            this.userRepository.persist(user);
-            this.userRepository.flush();
+            this.userRepository.getEntityManager().merge(user);
             return Result.ok(null);
         } catch (Throwable e) {
             return Result.err(e);

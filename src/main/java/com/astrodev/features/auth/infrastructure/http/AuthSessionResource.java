@@ -1,13 +1,17 @@
 package com.astrodev.features.auth.infrastructure.http;
 
-import com.astrodev.features.auth.application.*;
+import com.astrodev.features.auth.application.AuthService;
+import com.astrodev.features.auth.application.dtos.CreateSessionDTO;
+import com.astrodev.features.auth.application.dtos.DeleteSessionDTO;
+import com.astrodev.features.auth.application.dtos.RefreshSessionDTO;
+import com.astrodev.features.auth.infrastructure.AuthSessionTokenStore;
 import com.astrodev.features.auth.infrastructure.http.dtos.SessionCreateResDTO;
 import com.astrodev.features.auth.infrastructure.http.dtos.SessionDeleteReqDTO;
 import com.astrodev.features.auth.infrastructure.http.dtos.SessionRefreshReqDTO;
 import com.astrodev.features.auth.infrastructure.http.dtos.SessionRefreshResDTO;
-import com.astrodev.shared.http.HttpErrorDetails;
-import com.astrodev.shared.http.HttpErrorResponseData;
-import com.astrodev.shared.http.HttpResponse;
+import com.astrodev.shared.http.response.HttpErrorDetails;
+import com.astrodev.shared.http.response.HttpErrorResponseData;
+import com.astrodev.shared.http.response.HttpResponse;
 import com.astrodev.shared.monads.Err;
 import com.astrodev.shared.monads.Ok;
 import jakarta.annotation.security.PermitAll;
@@ -27,13 +31,10 @@ public class AuthSessionResource {
 
     @POST
     @PermitAll
-    public HttpResponse createSession(CreateSessionDTO createSessionDTO) {
+    public HttpResponse createSession(CreateSessionDTO createSessionDTO) throws Exception {
         final var result = this.authService.createSession(createSessionDTO);
         return switch (result) {
-            case Err(var error) -> HttpResponse.error(new HttpErrorResponseData(
-                    null,
-                    HttpErrorDetails.fromThrowable(error)
-            ));
+            case Err(var error) -> throw error;
             case Ok(var tokens) -> HttpResponse.success(new SessionCreateResDTO(
                     tokens.refreshToken(),
                     tokens.accessToken()

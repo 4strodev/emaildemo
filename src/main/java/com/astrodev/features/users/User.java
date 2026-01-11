@@ -14,11 +14,14 @@ import java.util.UUID;
 public class User extends PanacheEntityBase {
     @Id
     public UUID id;
-    @Column(length = 255)
+
+    @Column(name = "username", length = 255)
     public String username;
-    @Column(length = 255)
+
+    @Column(name = "email", length = 255)
     public String email;
-    @Column(length = 255)
+
+    @Column(name = "password", length = 255)
     public String password;
 
     public User() {

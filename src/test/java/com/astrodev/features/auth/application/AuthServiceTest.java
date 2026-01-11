@@ -1,6 +1,7 @@
 package com.astrodev.features.auth.application;
 
 import com.astrodev.features.auth.AuthSession;
+import com.astrodev.features.auth.application.dtos.RefreshSessionDTO;
 import com.astrodev.features.auth.infrastructure.AuthSessionRepository;
 import com.astrodev.features.users.User;
 import io.quarkus.test.InjectMock;

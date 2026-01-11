@@ -1,4 +1,4 @@
-package com.astrodev.features.auth.application;
+package com.astrodev.features.auth.application.dtos;
 
 public record DeleteSessionDTO(String refreshToken) {
 }

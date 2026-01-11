@@ -11,8 +11,10 @@ import java.util.UUID;
 public class AuthSession extends PanacheEntityBase {
     @Id
     public UUID id;
-    @Column
+
+    @Column(name = "expiration_time")
     public Instant expirationTime;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     public User user;

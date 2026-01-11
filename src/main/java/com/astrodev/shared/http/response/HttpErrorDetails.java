@@ -1,4 +1,4 @@
-package com.astrodev.shared.http;
+package com.astrodev.shared.http.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nonnull;
