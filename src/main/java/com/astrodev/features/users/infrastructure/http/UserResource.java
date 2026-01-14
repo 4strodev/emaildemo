@@ -14,6 +14,10 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import java.util.UUID;
 
@@ -26,6 +30,15 @@ public class UserResource {
     @PUT
     @Operation(summary = "Creates a new user in the platform")
     @PermitAll
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "201",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.HttpSuccessResponse.class)
+                    )
+            )
+    })
     public Response saveUser(@PathParam("id") UUID id, @Valid HTTPCreateUserDTO body) throws Throwable {
         var result = this.userService.save(new CreateUserDTO(id, body.username(), body.email(), body.password()));
         return switch (result) {
