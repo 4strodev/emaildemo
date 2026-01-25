@@ -4,13 +4,19 @@ import com.astrodev.features.orders.Order;
 import com.astrodev.features.orders.OrderId;
 import com.astrodev.features.orders.application.dtos.BulkCreateOrderDTO;
 import com.astrodev.features.orders.application.dtos.CreateOrderDTO;
+import com.astrodev.features.orders.application.dtos.OrderDto;
+import com.astrodev.features.orders.application.events.OrderCreatedEvent;
 import com.astrodev.features.orders.infrastructure.OrderRepository;
 import com.astrodev.features.product.Product;
 import com.astrodev.features.product.infrastructure.ProductRepository;
 import com.astrodev.features.users.infrastructure.UserRepository;
+import com.astrodev.shared.TxCallbacks;
+import com.astrodev.shared.events.EventBus;
 import com.astrodev.shared.monads.Result;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Status;
+import jakarta.transaction.TransactionSynchronizationRegistry;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
@@ -24,12 +30,14 @@ import java.util.stream.Collectors;
 public class OrderService {
     @Inject
     OrderRepository orderRepository;
-
     @Inject
     ProductRepository productRepository;
-
     @Inject
     UserRepository userRepository;
+    @Inject
+    EventBus eventBus;
+    @Inject
+    TransactionSynchronizationRegistry txSyncRegistry;
 
     @Transactional
     public Result<Void, Throwable> createOrder(CreateOrderDTO createOrderDTO) {
@@ -52,6 +60,15 @@ public class OrderService {
             order.totalPrice = product.price.multiply(new BigDecimal(createOrderDTO.amount()));
             order.productId = product.id;
             order.amount = createOrderDTO.amount();
+            this.txSyncRegistry.registerInterposedSynchronization(
+                    TxCallbacks.afterComplete((status) -> {
+                        if (!status.equals(Status.STATUS_COMMITTED)) {
+                            return;
+                        }
+
+                        this.notifyNewOrder(order);
+                    })
+            );
             this.orderRepository.persist(order);
 
             return Result.ok(null);
@@ -101,6 +118,17 @@ public class OrderService {
         } catch (Exception e) {
             return Result.err(e);
         }
+    }
 
+    private void notifyNewOrder(Order order) {
+        var event = new OrderCreatedEvent(new OrderDto(
+                order.orderId.orderId(),
+                order.productId,
+                order.orderId.createdAt(),
+                order.user.id,
+                order.amount,
+                order.totalPrice
+        ));
+        this.eventBus.publish(event);
     }
 }

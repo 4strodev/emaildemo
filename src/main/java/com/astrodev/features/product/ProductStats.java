@@ -37,8 +37,8 @@ public class ProductStats extends PanacheEntityBase {
     public BigDecimal avgAmount;
 
     @Column(name = "max_amount")
-    public BigDecimal maxAmount;
+    public BigInteger maxAmount;
 
     @Column(name = "min_amount")
-    public BigDecimal minAmount;
+    public BigInteger minAmount;
 }

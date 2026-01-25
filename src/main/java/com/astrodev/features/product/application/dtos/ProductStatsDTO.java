@@ -11,8 +11,8 @@ public record ProductStatsDTO(
         BigDecimal minPrice,
         BigDecimal avgPrice,
 
-        BigDecimal maxAmount,
-        BigDecimal minAmount,
+        BigInteger maxAmount,
+        BigInteger minAmount,
         BigDecimal avgAmount
 ) {
 }

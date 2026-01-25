@@ -88,10 +88,20 @@ public class AuthService {
     }
 
     public Result<Void, Exception> validateSession(UUID sessionId) {
-        if (!this.authSessionTokenStore.exists(sessionId)) {
+        if (this.authSessionTokenStore.exists(sessionId)) {
+            return Result.ok(null);
+        }
+
+        var authSession = this.authSessionRepository.find("id", sessionId).firstResult();
+        if (authSession == null) {
             return Result.err(new Exception("Token revoked"));
         }
 
+        if (authSession.expirationTime.isBefore(Instant.now())) {
+            return Result.err(new Exception("Token revoked"));
+        }
+
+        this.authSessionTokenStore.save(sessionId, this.createRefreshToken(authSession));
         return Result.ok(null);
     }
 
