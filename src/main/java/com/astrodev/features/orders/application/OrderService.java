@@ -86,7 +86,7 @@ public class OrderService {
                 var order = new Order();
                 order.orderId = new OrderId(
                         dto.orderId(),
-                        Instant.now()
+                        dto.timestamp().orElse(Instant.now())
                 );
                 order.user = user;
                 order.totalPrice = product.price.multiply(new BigDecimal(dto.amount()));

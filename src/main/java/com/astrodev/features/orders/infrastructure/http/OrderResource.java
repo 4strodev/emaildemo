@@ -53,7 +53,8 @@ public class OrderResource {
                              new BulkCreateOrderDTO(
                                      dto.orderId(),
                                      dto.productId(),
-                                     dto.amount()
+                                     dto.amount(),
+                                     dto.createdAt()
                              )).toList();
         var result = this.orderService.createBulkOrder(mappedOrders, UUID.fromString(userId));
 
