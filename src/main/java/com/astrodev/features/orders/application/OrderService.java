@@ -113,6 +113,15 @@ public class OrderService {
 
                 return order;
             }).toList();
+            this.txSyncRegistry.registerInterposedSynchronization(
+                    TxCallbacks.afterComplete((status) -> {
+                        if (!status.equals(Status.STATUS_COMMITTED)) {
+                            return;
+                        }
+
+                        orders.forEach(this::notifyNewOrder);
+                    })
+            );
             this.orderRepository.persist(orders);
             return Result.ok(null);
         } catch (Exception e) {
