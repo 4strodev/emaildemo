@@ -29,9 +29,8 @@ jobs:
       - name: Log in to Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # 3) Set up Buildx (recommended for multi-platform builds)
       - name: Set up Docker Buildx
@@ -44,6 +43,6 @@ jobs:
           context: .
           file: src/main/docker/Dockerfile.jvm   # <— your Quarkus native Dockerfile
           push: true                                # push to registry
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/emaildemo:latest
           # (optional) add platforms if you need multi-arch builds:
           # platforms: linux/amd64,linux/arm64
