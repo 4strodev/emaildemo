@@ -13,10 +13,15 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
-    implementation("io.quarkus:quarkus-messaging-rabbitmq")
+    implementation("io.quarkus:quarkus-container-image-docker")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
-    implementation("io.quarkus:quarkus-mailer")
+
+    implementation("io.quarkus:quarkus-logging-json")
+    // Misc
     implementation("io.quarkus:quarkus-arc")
+    implementation("io.quarkus:quarkus-messaging-rabbitmq")
+
+    // REST dependencies
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-jackson")
 
@@ -44,8 +49,8 @@ group = "com.astrodev"
 version = "1.0.0-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_22
-    targetCompatibility = JavaVersion.VERSION_22
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType<Test> {
