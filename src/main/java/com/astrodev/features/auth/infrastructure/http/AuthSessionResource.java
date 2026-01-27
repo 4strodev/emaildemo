@@ -64,7 +64,7 @@ public class AuthSessionResource {
                     null,
                     HttpErrorDetails.fromThrowable(error)
             ));
-            case Ok(var _) -> HttpResponse.success(null);
+            case Ok(var ignored) -> HttpResponse.success(null);
         };
     }
 }

@@ -33,7 +33,7 @@ public class ProductResource {
 
         return switch (result) {
             case Err(var err) -> throw err;
-            case Ok(_) -> Response.status(201).entity(HttpResponse.success(null)).build();
+            case Ok(var ignored) -> Response.status(201).entity(HttpResponse.success(null)).build();
         };
     }
 

@@ -39,7 +39,7 @@ public class OrderResource {
         ));
         return switch (result) {
             case Err(var err) -> throw err;
-            case Ok(_) -> Response.status(Response.Status.CREATED).entity(HttpResponse.success(null)).build();
+            case Ok(var ignored) -> Response.status(Response.Status.CREATED).entity(HttpResponse.success(null)).build();
         };
     }
 
@@ -60,7 +60,7 @@ public class OrderResource {
 
         return switch (result) {
             case Err(var err) -> throw err;
-            case Ok(_) -> Response.status(Response.Status.CREATED).entity(HttpResponse.success(null)).build();
+            case Ok(var ignored) -> Response.status(Response.Status.CREATED).entity(HttpResponse.success(null)).build();
         };
     }
 }

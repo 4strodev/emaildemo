@@ -42,7 +42,7 @@ public class UserResource {
     public Response saveUser(@PathParam("id") UUID id, @Valid HTTPCreateUserDTO body) throws Throwable {
         var result = this.userService.save(new CreateUserDTO(id, body.username(), body.email(), body.password()));
         return switch (result) {
-            case Ok(var _) -> Response.status(Response.Status.CREATED).entity(HttpResponse.success(null)).build();
+            case Ok(var ignored) -> Response.status(Response.Status.CREATED).entity(HttpResponse.success(null)).build();
             case Err(var error) -> throw error;
         };
     }
