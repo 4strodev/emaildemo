@@ -17,7 +17,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'openjdk'
+          distribution: 'temurin'
           java-version: 21.0.2
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
@@ -43,6 +43,6 @@ jobs:
           context: .
           file: src/main/docker/Dockerfile.native   # <— your Quarkus native Dockerfile
           push: true                                # push to registry
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/emaildemo:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/emaildemo-native:latest
           # (optional) add platforms if you need multi-arch builds:
           # platforms: linux/amd64,linux/arm64
