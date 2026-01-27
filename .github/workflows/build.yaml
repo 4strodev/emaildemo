@@ -1,0 +1,7 @@
+name: Project build
+on: [ push ]
+jobs:
+  Build-Project:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "running a github action"
