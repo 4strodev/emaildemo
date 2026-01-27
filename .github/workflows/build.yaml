@@ -17,12 +17,12 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: 22
+          distribution: 'openjdk'
+          java-version: 21.0.2
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew buildNative
 
       # 2) Log in to a container registry
       #    (example here is GitHub Container Registry)
@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: src/main/docker/Dockerfile.jvm   # <— your Quarkus native Dockerfile
+          file: src/main/docker/Dockerfile.native   # <— your Quarkus native Dockerfile
           push: true                                # push to registry
           tags: ${{ vars.DOCKERHUB_USERNAME }}/emaildemo:latest
           # (optional) add platforms if you need multi-arch builds:
